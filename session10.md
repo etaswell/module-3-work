@@ -6,7 +6,7 @@ In Session 9, you built a pipeline that extracts structured data from PDFs. It p
 
 But here's the question you should be asking: **are those numbers right?**
 
-LLMs confidently produce numbers that aren't in the source document. They mix up units. They grab a number from a table heading instead of a data cell. They hallucinate plausible-sounding values for fields that simply don't exist in the text.
+AI models confidently produce numbers that aren't in the source document. They mix up units. They grab a number from a table heading instead of a data cell. They make up plausible-sounding values for fields that simply don't exist in the text.
 
 Today you'll learn to systematically assess trust in AI-extracted data. And then you'll package everything into a reusable tool — something that works on any PDF, not just the ones you've already seen.
 
@@ -39,7 +39,7 @@ These are structurally different from the corporate reports you used in Session 
 
 1. Load `data/climate-action-plans/oakland-ecap-2020.pdf` and extract the text
 2. Show you text from a few pages near the beginning (where goals and targets are usually stated)
-3. Create a Pydantic schema for a city climate action plan with fields like:
+3. Create a schema (just like you did in Sessions 8 and 9) for a city climate action plan with fields like:
    - City name
    - Plan title
    - Year published
@@ -56,9 +56,9 @@ These are structurally different from the corporate reports you used in Session 
 
 Feel free to add or remove fields based on what you see in the document.
 
-**Checkpoint:** You should have a schema with 10–15 fields. Most should be Optional — not every plan will include every field.
+**Checkpoint:** You should have a schema with 10–15 fields. Most should be marked as optional (might not be present in every plan).
 
-**Think about:** How is this schema different from Session 9's corporate report schema? City plans talk about policy strategies (transportation, buildings, equity) while corporate reports focus on operational metrics (Scope 1/2/3, PUE, water). The schema design reflects what questions you're trying to answer.
+**Think about:** How is this schema different from Session 9's corporate report schema? City plans talk about policy strategies (transportation, buildings, equity) while corporate reports focus on operational metrics (emissions by scope, energy use, water). The schema you design reflects the questions you're trying to answer.
 
 ---
 
@@ -85,7 +85,7 @@ This isn't a bug. It's revealing genuine ambiguity in the source text. When expe
 
 ## Task 3: Same model, same input, three times
 
-**What you're doing:** Even with temperature set to 0, AI models aren't perfectly deterministic. Let's find out how much variation there is.
+**What you're doing:** You might expect that running the exact same extraction with the same settings would always give the same answer. It doesn't. Even with randomness turned as low as it goes (`temperature=0.0`), AI models can produce slightly different outputs on different runs. Let's find out how much variation there is.
 
 **Ask your coding agent to:**
 
@@ -111,7 +111,7 @@ Combine these into a confidence score.
 Create a function that takes a field name, its value, the source text, and the results from Tasks 2–3, and returns a confidence score:
 - **Multi-model agreement** (0–2 points): Did both models extract the same value?
 - **Reproducibility** (0–2 points): Was exactly the same value extracted in all three runs?
-- **Source grounding** (0–2 points): Does the extracted value appear verbatim in the source text?
+- **Source grounding** (0–2 points): Does the extracted value actually appear word-for-word in the source text?
 
 Classify each field as HIGH (5–6 points), MEDIUM (3–4), or LOW (0–2).
 
@@ -125,7 +125,7 @@ Run this on every field from your extraction and display the results.
 
 ## Task 5: Full document vs. chunks — does it matter?
 
-**What you're doing:** In Session 9, you broke documents into chunks because AI models used to have small context windows. But qwen3 can handle 262,000 tokens — enough for most entire PDFs. Does sending the whole document at once produce better results?
+**What you're doing:** In Session 9, you broke documents into chunks because that was the standard approach — AI models used to choke on long inputs. But newer models like qwen3 can handle enormous amounts of text (262,000 "tokens" — roughly 200,000 words, which is longer than most books). That's enough for most entire PDFs in a single request. Does sending the whole document at once produce better results than chunking?
 
 **Ask your coding agent to:**
 
@@ -149,7 +149,7 @@ Run this on every field from your extraction and display the results.
 
 Create a function called `extract_document` that takes:
 - A path to any PDF file
-- A Pydantic schema class (any schema, not hardcoded)
+- A schema class (any schema — the function shouldn't be hardcoded to one specific set of fields)
 - Optionally: which model to use, how many chunks to process
 
 And returns:
@@ -178,8 +178,8 @@ The function should automatically:
 
 1. Loop through all PDFs in `data/climate-action-plans/`
 2. Run `extract_document` on each with your city climate plan schema
-3. Collect results into a DataFrame
-4. Print a comparison table showing each city's GHG target, target year, and carbon neutrality goal
+3. Collect results into a comparison table
+4. Print the table showing each city's GHG target, target year, and carbon neutrality goal
 5. Print a validation report: how many fields were extracted per document, any validation warnings
 6. Save the results as JSON and CSV to `output/`
 
@@ -196,15 +196,15 @@ The function should automatically:
 
 Across three sessions, you went from "ask ChatGPT a question" to:
 
-1. **Programmatic AI access** — calling models from code, which means you can scale
-2. **Structured extraction** — getting data in columns, not paragraphs
+1. **Programmatic AI access** — calling models from code, not a chat window, which means you can do it at scale
+2. **Structured extraction** — getting data in labeled fields and columns, not paragraphs
 3. **PDF processing** — handling real messy documents, not curated examples
-4. **Validation** — knowing which results to trust and which to verify
-5. **Multi-model comparison** — using disagreement as a signal of ambiguity
+4. **Validation** — knowing which results to trust and which to verify by hand
+5. **Multi-model comparison** — using disagreement between models as a signal of ambiguity
 6. **Reproducibility testing** — understanding the limits of AI consistency
 7. **A reusable tool** — `extract_document()` works on any PDF with any schema
 
-The pipeline you built can process hundreds of climate documents into a structured dataset. That's a capability that didn't exist before these models — and knowing how to build it, validate it, and trust it appropriately is what separates useful analysis from AI-generated noise.
+The process you built can handle hundreds of climate documents and turn them into a structured dataset. That's a capability that didn't exist before these models — and knowing how to build it, validate it, and trust it appropriately is what separates useful analysis from AI-generated noise.
 
 ---
 

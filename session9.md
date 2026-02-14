@@ -4,7 +4,7 @@
 
 In Session 8, you extracted structured data from short text passages you pasted into your code. That was training wheels. Real climate data lives in PDFs — 100-page corporate sustainability reports, city climate action plans, federal energy studies.
 
-Today you'll build a pipeline that opens a real PDF, extracts the text, breaks it into manageable pieces, sends those pieces to an AI model, and collects the results into a structured dataset. By the end, you'll have a comparison table across four major companies — the kind of analysis that would take a human analyst a full day.
+Today you'll build a process that opens a real PDF, pulls out the text, breaks it into manageable pieces, sends those pieces to an AI model, and collects the results into a structured dataset. By the end, you'll have a comparison table across four major companies — the kind of analysis that would take a human analyst a full day.
 
 ---
 
@@ -23,11 +23,11 @@ Make sure:
 
 ## Task 1: Look inside a PDF
 
-**What you're doing:** Before you can extract data from a PDF, you need to understand what the AI will actually see. PDF text extraction is imperfect — headers and footers get mixed in, table columns get merged, charts disappear entirely.
+**What you're doing:** Before you can extract data from a PDF, you need to see what the AI will actually be working with. When you extract text from a PDF programmatically, the result is far messier than what you see on screen — headers and footers get mixed in, table columns get merged, charts and images disappear entirely.
 
 **Ask your coding agent to:**
 
-Open `data/corporate-sustainability/google-env-2024.pdf` using PyMuPDF (the library is called `fitz`), extract the text from each page, and print the text from page 10.
+Open `data/corporate-sustainability/google-env-2024.pdf` using a PDF reading library called PyMuPDF, extract the text from each page, and print the text from page 10.
 
 **Checkpoint:** You should see a wall of text. It won't be perfectly formatted — you'll see stray characters, broken table layouts, headers mixed into body text. This is normal. Every PDF is different.
 
@@ -37,11 +37,11 @@ Open `data/corporate-sustainability/google-env-2024.pdf` using PyMuPDF (the libr
 
 ## Task 2: Break the document into chunks
 
-**What you're doing:** These PDFs are 68–113 pages long. That's tens of thousands of words. While modern AI models can handle very long inputs, sending the entire document for every question is wasteful and noisy. Instead, we break it into smaller pieces ("chunks") and only process the most relevant ones.
+**What you're doing:** These PDFs are 68–113 pages long — tens of thousands of words. While modern AI models can handle very long inputs, sending the entire document for every question is wasteful and slow. Instead, we break the text into smaller pieces called "chunks" (a few pages each) and only send the most relevant ones to the AI.
 
 **Ask your coding agent to:**
 
-Split the Google report's text into overlapping chunks of about 4,000 characters each, with 200 characters of overlap between consecutive chunks. Use the `RecursiveCharacterTextSplitter` from `langchain_text_splitters`.
+Split the Google report's text into overlapping chunks of about 4,000 characters each, with 200 characters of overlap between consecutive chunks. Use the `RecursiveCharacterTextSplitter` from the `langchain_text_splitters` library (your agent will know how to use this).
 
 Print how many chunks were created, and show the first chunk.
 
@@ -65,22 +65,22 @@ Score each chunk by counting how many data-relevant keywords appear in it. Good 
 
 ---
 
-## Task 4: Design a sustainability report schema
+## Task 4: Design what you want to extract
 
-**What you're doing:** In Session 8, you had a simple schema with 5–6 fields. A real sustainability report contains much more. You'll design a schema that captures the key metrics investors and policymakers actually care about.
+**What you're doing:** In Session 8, you defined a simple schema (template) with 5–6 fields. A real sustainability report contains much more. Now you'll design a richer schema that captures the data investors and policymakers actually care about.
 
 **Ask your coding agent to:**
 
-Create Pydantic schemas for a sustainability report extraction. Think about what data you'd want to compare across companies. Here's a starting point:
+Create a Pydantic schema for sustainability report data. (Recall from Session 8: Pydantic is the library that defines the "shape" of the data you want back — which fields, what type each one is, and a description to guide the AI.) Think about what you'd want to compare across companies. Here's a starting point:
 
 - **Emissions data:** Scope 1 emissions, Scope 2 emissions (ideally both market-based and location-based), Scope 3 emissions, total emissions, units (tCO2e usually), reporting year
 - **Energy data:** total energy consumption, renewable energy percentage
 - **Climate targets:** target description, target year, baseline year, scope coverage
 - **Water data** (if you want): total water withdrawal, water consumption
 
-The schema should handle the fact that many fields might not be present in every report — use Optional fields with sensible descriptions.
+The schema should handle the fact that many fields might not be present in every report — mark fields that might be missing as Optional (your agent will know what this means).
 
-**Checkpoint:** You should have Pydantic model(s) defined.  The key is that every field has a description that tells the AI what to look for. Clear descriptions = better extraction.
+**Checkpoint:** You should have a schema defined with multiple groups of fields. The key is that every field has a description that tells the AI what to look for — clearer descriptions mean better extraction.
 
 ---
 
@@ -101,18 +101,18 @@ Build a function that:
 Run it on the Google report and print the results.
 
 **Important details to mention:**
-- Use JSON mode (`response_format={"type": "json_object"}`)
-- Disable thinking for JSON extraction
-- Use `temperature=0.0`
-- Add a short pause (`time.sleep(0.5)`) between API calls to avoid overwhelming the server
-- Handle cases where the AI returns nothing (content is None) — just skip that chunk
+- Use JSON mode (structured data output) like in Session 8
+- Disable thinking for structured extraction (same as Session 8)
+- Use `temperature=0.0` for consistency
+- Add a short pause (`time.sleep(0.5)`) between requests to avoid overwhelming the server
+- Handle cases where the model returns nothing — just skip that chunk
 
-**Checkpoint:** You should get a JSON object with actual numbers from Google's report. Look for:
+**Checkpoint:** You should get back structured data with actual numbers from Google's report. Look for:
 - Scope 2 emissions should be in the millions of tCO2e range
 - Renewable energy percentage should be high (Google is a big renewable buyer)
 - Total energy consumption should be in the millions of MWh range
 
-If you're getting nulls for everything, the schema descriptions might not be clear enough, or the keyword scoring might not be finding the right chunks.
+If you're getting blanks for everything, the field descriptions in your schema might not be specific enough, or the keyword scoring might not be finding the right chunks.
 
 ---
 
@@ -122,9 +122,9 @@ If you're getting nulls for everything, the schema descriptions might not be cle
 
 **Ask your coding agent to:**
 
-Loop through all four reports (Google, Apple, Amazon, BP), run the extraction function on each, and collect the results into a pandas DataFrame. Print the comparison table.
+Loop through all four reports (Google, Apple, Amazon, BP), run the extraction function on each, and collect the results into a comparison table using `pandas`. Print the table.
 
-**Checkpoint:** You should have a table with 4 rows and columns for each metric. It will probably take 2–5 minutes to process all four (depending on API speed). Some fields will be null for some companies — that's normal, not every report includes every metric.
+**Checkpoint:** You should have a table with 4 rows and columns for each metric. It will probably take 2–5 minutes to process all four (depending on server speed). Some fields will be blank for some companies — that's normal, not every report includes every metric.
 
 **Look for interesting patterns:**
 - Which company reports the highest total emissions?
@@ -135,7 +135,7 @@ Loop through all four reports (Google, Apple, Amazon, BP), run the extraction fu
 
 ## Task 7: Validate the results
 
-**What you're doing:** Here's the part most people skip — and the part that matters most. LLMs confidently produce numbers that aren't in the source document. You need to check.
+**What you're doing:** Here's the part most people skip — and the part that matters most. AI models confidently produce numbers that aren't in the source document. You need to check.
 
 **Ask your coding agent to:**
 
@@ -158,18 +158,20 @@ Run the validation on all four companies and flag any issues.
 
 **Ask your coding agent to:**
 
-Save the extraction results as both JSON (with all the detail) and CSV (just the comparison table) to the `output/` directory.
+Save the extraction results in two formats to the `output/` directory:
+- **JSON** — a structured file that preserves all the detail (nested fields, metadata). Good for archiving and further processing.
+- **CSV** — a simple spreadsheet-compatible table. Good for opening in Excel or Google Sheets.
 
-**Checkpoint:** You should have two files in `output/` — one JSON, one CSV.
+**Checkpoint:** You should have two files in `output/`.
 
 ---
 
 ## What you built today
 
-- A PDF processing pipeline that handles real sustainability reports
-- Smart chunking with keyword-based relevance scoring
-- Multi-field extraction using Pydantic schemas
+- A process that reads real sustainability PDFs and pulls out the text
+- Smart chunking that focuses on the sections most likely to contain data
+- A schema that tells the AI exactly what fields to extract
 - A batch comparison across four major companies
 - Validation checks that flag suspicious results
 
-Next session, you'll push further: Can you trust these numbers? Do different models agree? What happens when you run the same extraction twice? And you'll turn this pipeline into a reusable tool.
+Next session, you'll push further: Can you trust these numbers? Do different models agree? What happens when you run the same extraction twice? And you'll turn this process into a reusable tool.
