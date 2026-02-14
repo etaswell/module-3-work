@@ -10,6 +10,19 @@ This module spans **3 sessions (8–10)** across Weeks 4–5. Students move from
 
 The unifying theme is **climate documents** — the messy PDFs that climate professionals actually work with: city climate action plans, corporate sustainability reports, and federal energy planning studies.
 
+### Pedagogical approach
+
+Students in this course are not programmers. They have never written Python by hand and are not expected to. They all have access to AI coding agents (Claude, Copilot, etc.) in VS Code.
+
+**The student deliverables are guided markdown workbooks** (`session8.md`, `session9.md`, `session10.md`) that walk students through prompting their coding agent to build each pipeline. The student's job is to:
+
+1. Know what to ask for (the workbook provides the intent and context)
+2. Evaluate whether the agent's code is doing the right thing (checkpoints)
+3. Think critically about the results (reflection questions)
+4. Iterate when something doesn't work
+
+The `notebooks/` directory contains **instructor answer keys** — working Python that shows what the agent should produce. These are for instructor reference only, not student distribution.
+
 ### What students will learn
 
 | Session | Title | Core Skill |
@@ -24,20 +37,30 @@ The unifying theme is **climate documents** — the messy PDFs that climate prof
 
 ```
 module-3-template/
+├── overview.md                   # Student-facing module introduction
+├── session8.md                   # Session 8: guided lab workbook
+├── session9.md                   # Session 9: guided lab workbook
+├── session10.md                  # Session 10: guided lab workbook
 ├── download_data.sh              # Downloads all 15 PDFs (~260MB)
 ├── pyproject.toml                # Python dependencies (managed by uv)
 ├── .gitignore                    # Excludes data/, output/, .venv/
-├── notebooks/
-│   ├── session8-llm-apis.py                # Session 8: LLM API intro
-│   ├── session9-pdf-extraction.py          # Session 9: PDF → structured data
-│   └── session10-validation-and-tools.py   # Session 10: Validation & tools
+├── notebooks/                    # INSTRUCTOR REFERENCE IMPLEMENTATIONS
+│   ├── session8-llm-apis.py                # Answer key: Session 8
+│   ├── session9-pdf-extraction.py          # Answer key: Session 9
+│   └── session10-validation-and-tools.py   # Answer key: Session 10
 └── data/                         # Created by download_data.sh (not in git)
     ├── climate-action-plans/     # 7 city/state/international PDFs
     ├── corporate-sustainability/ # 4 tech/energy company reports
     └── utility-irps/             # 4 federal energy planning studies
 ```
 
-### Files are `.py` with `# %%` cell markers
+### Student deliverables vs. instructor materials
+
+**Students receive**: the `session*.md` files, `overview.md`, `download_data.sh`, and `pyproject.toml`. The markdown workbooks guide them through prompting their AI coding agents (Copilot, etc.) to build each pipeline step by step. Students never write Python by hand — they direct their agent and evaluate the results.
+
+**The `notebooks/` directory contains instructor reference implementations** — the "answer key." These are working `.py` files that show what the agent-generated code should roughly look like. Use them to debug student issues, verify expected outputs, and prepare for class. They are NOT distributed to students.
+
+### The `.py` files use `# %%` cell markers
 
 The notebooks use VS Code's "interactive Python" format — plain `.py` files with `# %%` cell delimiters. VS Code renders these as executable notebook cells. This is intentional:
 
