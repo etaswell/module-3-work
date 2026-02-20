@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "timestamp": "2026-02-20T12:41:20.402859",
+    "model": "qwen3",
+    "total_processed": 3,
+    "successful": 3
+  },
+  "commitments": [
+    {
+      "company_name": "Apple",
+      "target_year": 2030,
+      "target_description": "becoming carbon neutral across its entire supply chain and product life cycle",
+      "baseline_year": 2015,
+      "scope_coverage": "Scope 1, Scope 2, and Scope 3",
+      "interim_target": "achieved carbon neutrality for its global corporate operations in 2020"
+    },
+    {
+      "company_name": "Amazon",
+      "target_year": 2040,
+      "target_description": "net-zero carbon emissions by 2040",
+      "baseline_year": 2019,
+      "scope_coverage": "all three emission scopes",
+      "interim_target": null
+    },
+    {
+      "company_name": "Microsoft",
+      "target_year": 2030,
+      "target_description": "become carbon negative by 2030, and by 2050, to remove all the carbon the company has emitted since it was founded in 1975",
+      "baseline_year": 1975,
+      "scope_coverage": "Scope 1, 2, and 3",
+      "interim_target": null
+    }
+  ]
+}

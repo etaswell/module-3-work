@@ -1,0 +1,24 @@
+2026-02-20 12:37:34,331 - INFO - ======================================================================
+2026-02-20 12:37:34,332 - INFO - Climate Commitment Extraction Pipeline Started
+2026-02-20 12:37:34,332 - INFO - ======================================================================
+2026-02-20 12:37:34,335 - INFO - Schema loaded: ClimateCommitment
+2026-02-20 12:37:34,935 - INFO - API Configuration:
+2026-02-20 12:37:34,935 - INFO -   Base URL: https://ellm.nrp-nautilus.io/v1
+2026-02-20 12:37:34,935 - INFO -   API Key: SET
+2026-02-20 12:37:34,935 - INFO -   Model: qwen3
+2026-02-20 12:37:34,935 - INFO - 
+Processing 5 companies...
+2026-02-20 12:37:34,999 - INFO - Processing: Apple
+2026-02-20 12:37:35,005 - INFO - Text length: 613 characters
+2026-02-20 12:38:02,644 - INFO - HTTP Request: POST https://ellm.nrp-nautilus.io/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 12:38:02,660 - INFO -   Target: carbon neutral across its entire supply chain and product life cycle
+2026-02-20 12:38:02,661 - INFO -   Year: 2030
+2026-02-20 12:38:02,661 - INFO -   Scopes: Scope 1, Scope 2, Scope 3
+2026-02-20 12:38:02,664 - INFO - Processing: Amazon
+2026-02-20 12:38:02,666 - INFO - Text length: 437 characters
+2026-02-20 12:38:27,883 - INFO - HTTP Request: POST https://ellm.nrp-nautilus.io/v1/chat/completions "HTTP/1.1 200 OK"
+2026-02-20 12:38:27,883 - INFO -   Target: reaching net-zero carbon emissions
+2026-02-20 12:38:27,883 - INFO -   Year: 2040
+2026-02-20 12:38:27,883 - INFO -   Scopes: all three emission scopes
+2026-02-20 12:38:27,883 - INFO - Processing: BP
+2026-02-20 12:38:27,900 - INFO - Text length: 468 characters

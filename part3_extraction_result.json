@@ -1,0 +1,12 @@
+{
+  "source": "Part 3 - Apple Climate Commitment",
+  "model": "qwen3",
+  "extraction": {
+    "company_name": "Apple",
+    "target_year": 2030,
+    "target_description": "carbon neutral across its entire supply chain and product life cycle",
+    "baseline_year": 2015,
+    "scope_coverage": "Scope 1, Scope 2, and Scope 3 emissions",
+    "interim_target": "carbon neutrality for global corporate operations"
+  }
+}

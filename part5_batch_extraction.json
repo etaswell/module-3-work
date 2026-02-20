@@ -1,0 +1,32 @@
+{
+  "source": "Part 5 - Batch Extraction",
+  "model": "qwen3",
+  "total_companies": 3,
+  "successful_extractions": 3,
+  "commitments": [
+    {
+      "company_name": "Amazon",
+      "target_year": 2040,
+      "target_description": "net-zero carbon emissions",
+      "baseline_year": 2019,
+      "scope_coverage": "all three emission scopes",
+      "interim_target": null
+    },
+    {
+      "company_name": "BP",
+      "target_year": 2050,
+      "target_description": "become a net zero company by 2050 or sooner, and to help the world get to net zero",
+      "baseline_year": 2019,
+      "scope_coverage": "Scope 1, 2, and 3",
+      "interim_target": "Reduce Scope 1 and 2 operational emissions by 50% by 2030 compared to 2019 baseline; reduce the carbon intensity of products sold by 15-20% by 2030"
+    },
+    {
+      "company_name": "Apple",
+      "target_year": 2030,
+      "target_description": "becoming carbon neutral across its entire supply chain and product life cycle",
+      "baseline_year": 2015,
+      "scope_coverage": "Scope 1, Scope 2, and Scope 3 emissions",
+      "interim_target": "carbon neutrality for its global corporate operations by 2020"
+    }
+  ]
+}
