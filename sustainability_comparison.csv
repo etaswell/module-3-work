@@ -1,0 +1,5 @@
+company_name,reporting_year,scope_1_emissions,scope_2_emissions_market_based,scope_2_emissions_location_based,scope_3_emissions,total_emissions,emissions_units,total_energy_consumption,energy_consumption_units,renewable_energy_percentage,renewable_energy_absolute,target_description,target_year,baseline_year,scope_coverage,interim_target,total_water_withdrawal,water_consumption,water_units,report_title,notes
+Google,,91200.0,2492200.0,,7600000.0,,,,,,,,,,,,,,,,
+Apple,,55200.0,,,,,,,,,,,,2015.0,,,,,,,
+Amazon,,,,,,,,,,90.0,,,,,,,,,,,
+BP,,,,,,,,,,,,,,,,,,,,,
